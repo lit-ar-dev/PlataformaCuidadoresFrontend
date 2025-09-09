@@ -7,6 +7,7 @@ import TextInputField from "../components/TextInputField";
 import { login } from "../services/auth";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../navigation";
+import { PasswordInput } from "../components/PasswordInput";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Login">;
 
@@ -64,10 +65,9 @@ export default function LoginScreen({ navigation }: Props) {
               error={touched.email ? errors.email : undefined}
             />
 
-            <TextInputField
+            <PasswordInput
               label="Contraseña"
               placeholder="******"
-              secureTextEntry
               onChangeText={handleChange("contraseña")}
               onBlur={handleBlur("contraseña")}
               value={values.contraseña}

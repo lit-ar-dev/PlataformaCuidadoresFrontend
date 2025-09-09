@@ -5,18 +5,18 @@ export interface RegisterPayload {
   persona: {
     nombre: string;
     apellido: string;
-    fechaDeNacimiento: string;
+    fechaDeNacimiento: Date;
     telefono?: string | null;
     ciudadId: number;
     generoId?: number | null;
   };
-  cliente?: { domicilio: string };
+  cliente?: { domicilio?: string | null };
   cuidador?: {
-    descripcion: string;
-    experiencia?: string[];
-    formacion?: string[];
-    tarifas: { precio: number; servicios: string[]; grupoId: number }[];
-    tags?: string[];
+    descripcion?: string | null;
+    experiencia?: string[] | null;
+    formacion?: string[] | null;
+    tarifas?: { precio: number; servicios: string[]; grupoId: number }[] | null;
+    tags?: string[] | null;
   };
   rolesId: number[];
 }
@@ -47,3 +47,12 @@ export const getRoles = async (): Promise<Rol[]> => {
     throw error;
   }
 };
+
+export async function checkEmailExists(email: string): Promise<boolean> {
+  const url = `/auth/email-exists/${email}`;
+  console.log("Checking email existence with URL:", url);
+  const res = await api.get(url);
+  console.log(res.data);
+
+  return res.data;
+}
