@@ -7,8 +7,8 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { ThemedText } from "../themed-text";
-import { ThemedView } from "../themed-view";
+import { ThemedText } from "./themed-text";
+import { ThemedView } from "./themed-view";
 
 type Item = { id: number; nombre: string };
 

@@ -2,7 +2,7 @@ import api, { setAuthToken } from "@/src/api/api";
 import * as SecureStore from "expo-secure-store";
 import React, { createContext, useContext, useEffect, useReducer } from "react";
 
-type User = { id: number; nombre: string; email: string } | null;
+type User = { id: number; nombre: string; email: string } | null | undefined;
 
 type State = {
   user: User;
@@ -12,7 +12,7 @@ type State = {
 
 type Action =
   | { type: "RESTORE"; token: string | null; user: User | null }
-  | { type: "SIGN_IN"; token: string; user: User }
+  | { type: "SIGN_IN"; token: string; user: User | undefined }
   | { type: "SIGN_OUT" };
 
 const initialState: State = { user: null, token: null, restoring: true };
@@ -37,7 +37,7 @@ function reducer(state: State, action: Action): State {
 
 const AuthContext = createContext<{
   state: State;
-  signIn: (token: string, user: User) => Promise<void>;
+  signIn: (token: string, user?: User | undefined) => Promise<void>;
   signOut: () => Promise<void>;
 } | null>(null);
 
@@ -53,7 +53,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         const token = await SecureStore.getItemAsync("authToken");
         if (token) {
           setAuthToken(token);
-          const res = await api.get("/auth/me");
+          const res = await api.get("/auth/me", {
+            headers: { Authorization: `Bearer ${token}` },
+          });
           dispatch({ type: "RESTORE", token, user: res.data });
         } else {
           dispatch({ type: "RESTORE", token: null, user: null });
@@ -65,9 +67,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     })();
   }, []);
 
-  const signIn = async (token: string, user: User) => {
+  const signIn = async (token: string, user: User | undefined) => {
     await SecureStore.setItemAsync("authToken", token);
     setAuthToken(token);
+    if (!user) {
+      const res = await api.get("/auth/me");
+      user = res.data;
+      dispatch({ type: "SIGN_IN", token, user });
+    }
     dispatch({ type: "SIGN_IN", token, user });
   };
 

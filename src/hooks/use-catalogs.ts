@@ -9,7 +9,7 @@ import {
   Grupo,
   Provincia,
 } from "@/src/api/utilidades";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 export function useCatalogs() {
   const [provincias, setProvincias] = useState<Provincia[]>([]);
@@ -48,12 +48,21 @@ export function useCatalogs() {
     };
   }, []);
 
-  const loadCiudades = async (provinciaId?: number) => {
-    setCiudades([]);
-    if (!provinciaId) return;
-    const c = await getCiudadesByProvincia(provinciaId);
-    setCiudades(c);
-  };
+  const loadCiudades = useCallback(
+    async (provinciaId?: number) => {
+      // clear previous ciudades immediately
+      setCiudades([]);
+      if (!provinciaId) return;
+      try {
+        const c = await getCiudadesByProvincia(provinciaId);
+        setCiudades(c);
+      } catch (e) {
+        console.error("Error al cargar ciudades:", e);
+        setCiudades([]);
+      }
+    },
+    [setCiudades]
+  );
 
   return {
     provincias,

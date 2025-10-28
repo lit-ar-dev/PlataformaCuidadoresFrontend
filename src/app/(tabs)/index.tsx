@@ -1,12 +1,15 @@
+import ParallaxScrollView from "@/src/components/parallax-scroll-view";
+import { ThemedText } from "@/src/components/ui/themed-text";
+import { ThemedView } from "@/src/components/ui/themed-view";
+import { useCuidadores } from "@/src/hooks/use-cuidadores";
 import { Image } from "expo-image";
+import { Link } from "expo-router";
 import { Platform, StyleSheet } from "react-native";
 
-import ParallaxScrollView from "@/src/components/parallax-scroll-view";
-import { ThemedText } from "@/src/components/themed-text";
-import { ThemedView } from "@/src/components/themed-view";
-import { Link } from "expo-router";
-
 export default function HomeScreen() {
+  const { cuidadores } = useCuidadores();
+  console.log("cuidadores=", cuidadores);
+
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: "#A1CEDC", dark: "#1D3D47" }}

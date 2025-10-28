@@ -9,31 +9,13 @@ import React from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
 
-export const FullSchema = z
-  .object({
-    usuario: usuarioSchema.shape.usuario,
-    persona: personaSchema.shape.persona,
-    rolesId: rolesSchema.shape.rolesId,
-    cliente: clienteSchema.shape.cliente.optional(),
-    cuidador: cuidadorSchema.shape.cuidador.optional(),
-  })
-  .superRefine((obj, ctx) => {
-    const roles: number[] = obj.rolesId ?? [];
-    if (roles.includes(1) && !obj.cliente) {
-      ctx.addIssue({
-        code: "custom",
-        message: "Completar datos de cliente",
-        path: ["cliente"],
-      });
-    }
-    if (roles.includes(3) && !obj.cuidador) {
-      ctx.addIssue({
-        code: "custom",
-        message: "Completar datos de cuidador",
-        path: ["cuidador"],
-      });
-    }
-  });
+export const FullSchema = z.object({
+  usuario: usuarioSchema.shape.usuario,
+  persona: personaSchema.shape.persona,
+  rolesId: rolesSchema.shape.rolesId,
+  cliente: clienteSchema.shape.cliente.optional(),
+  cuidador: cuidadorSchema.shape.cuidador.optional(),
+});
 
 export default function RegisterLayout() {
   const methods = useForm({
@@ -59,6 +41,7 @@ export default function RegisterLayout() {
         <Stack.Screen name="step1" options={{ title: "Paso 1 - Usuario" }} />
         <Stack.Screen name="step2" options={{ title: "Paso 2 - Persona" }} />
         <Stack.Screen name="step3" options={{ title: "Paso 3 - Roles" }} />
+        <Stack.Screen name="review" options={{ title: "Revisión" }} />
       </Stack>
     </FormProvider>
   );

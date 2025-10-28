@@ -3,10 +3,7 @@ import { tarifaSchema } from "./tarifa";
 
 export const cuidadorSchema = z.object({
   cuidador: z.object({
-    descripcion: z
-      .string()
-      .nonempty("Descripción requerida")
-      .min(30, "Mínimo 30 caracteres"),
+    descripcion: z.string().nonempty("Descripción requerida"),
     experiencia: z.array(z.string()).nullable().optional(),
     formacion: z.array(z.string()).nullable().optional(),
     tarifas: z.array(tarifaSchema).nullable().optional(),

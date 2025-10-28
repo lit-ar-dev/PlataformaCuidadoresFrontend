@@ -3,7 +3,10 @@ import Constants from "expo-constants";
 
 type ExpoExtra = { API_BASE?: string };
 const extra = (Constants.expoConfig?.extra ?? {}) as ExpoExtra;
-const API_BASE = extra.API_BASE ?? "http://localhost:3333";
+const API_BASE =
+  extra.API_BASE ?? "https://cuidadoresbackend.alejokinder.com.ar:443";
+
+console.log("API_BASE:", API_BASE);
 
 const api = axios.create({
   baseURL: API_BASE,

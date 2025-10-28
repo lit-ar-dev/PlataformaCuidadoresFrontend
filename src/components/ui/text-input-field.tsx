@@ -8,8 +8,8 @@ import {
   View,
   ViewStyle,
 } from "react-native";
-import { ThemedText } from "../themed-text";
-import { ThemedView } from "../themed-view";
+import { ThemedText } from "./themed-text";
+import { ThemedView } from "./themed-view";
 
 type TextInputFieldProps = TextInputProps & {
   label?: string;

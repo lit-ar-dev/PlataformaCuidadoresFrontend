@@ -1,16 +1,15 @@
+import { login } from "@/src/api/auth";
+import { PasswordInput } from "@/src/components/ui/pass-input";
+import TextInputField from "@/src/components/ui/text-input-field";
+import { ThemedText } from "@/src/components/ui/themed-text";
+import { ThemedView } from "@/src/components/ui/themed-view";
+import { useAuth } from "@/src/contexts/AuthContext";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Link, useRouter } from "expo-router";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Button, StyleSheet, TouchableOpacity } from "react-native";
 import { z } from "zod";
-
-import { login } from "@/src/api/auth";
-import { ThemedText } from "@/src/components/themed-text";
-import { ThemedView } from "@/src/components/themed-view";
-import { PasswordInput } from "@/src/components/ui/pass-input";
-import TextInputField from "@/src/components/ui/text-input-field";
-import { useAuth } from "@/src/contexts/AuthContext";
 
 const LoginSchema = z.object({
   email: z.string().email("Email inválido"),
@@ -35,17 +34,12 @@ export default function LoginScreen() {
 
   const onSubmit = async (values: Values) => {
     try {
-      // isSubmitting está manejado por RHF al envolver la promesa retornada
       const data = await login(values);
 
-      const token: string | undefined =
-        (data && (data.token || data.accessToken || data.access_token)) ??
-        undefined;
-
-      const user = data?.user ?? null;
+      const token: string | undefined = (data && data.token) ?? undefined;
 
       if (token) {
-        await signIn?.(token, user);
+        await signIn?.(token);
         router.replace("/(tabs)");
       } else {
         // setear error en campo email (ejemplo), similar a setErrors en Formik
