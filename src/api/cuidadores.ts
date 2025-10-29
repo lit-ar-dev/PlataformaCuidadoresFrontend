@@ -1,6 +1,7 @@
 import api from "./api";
 
 export type Cuidador = {
+  id: string;
   descripcion: string;
   usuario: {
     activo: boolean;
