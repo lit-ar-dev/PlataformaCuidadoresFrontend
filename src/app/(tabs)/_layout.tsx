@@ -35,6 +35,16 @@ export default function TabLayout() {
           ),
         }}
       />
+      <Tabs.Screen
+        name="cuidadores"
+        options={{
+          title: "Cuidadores",
+          tabBarIcon: ({ color }) => (
+            <IconSymbol size={28} name="house.fill" color={color} />
+          ),
+        }}
+      />
+
     </Tabs>
   );
 }
